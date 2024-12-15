@@ -1,5 +1,6 @@
 package med.voll.api.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import med.voll.api.domain.direccion.DatosDireccion;
@@ -16,6 +17,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("pacientes")
+@SecurityRequirement(name = "bearer-key")
 public class PacienteController {
 
     @Autowired
@@ -28,8 +30,8 @@ public class PacienteController {
         URI uri = uriBuilder.path("/paciente/{id}").buildAndExpand(paciente.getId()).toUri();
         DatosRespuestaPaciente datosRespuestaPaciente = new DatosRespuestaPaciente(
                 paciente.getId(), paciente.getNombre(), paciente.getEmail(), paciente.getTelefono(),
-                paciente.getDocumento(), new DatosDireccion(paciente.getDireccion().getCalle(),
-                paciente.getDireccion().getDistrito(), paciente.getDireccion().getCiudad(),
+                paciente.getDocumento(), new DatosDireccion(
+                        paciente.getDireccion().getCalle(), paciente.getDireccion().getDistrito(), paciente.getDireccion().getCiudad(),
                 paciente.getDireccion().getNumero(), paciente.getDireccion().getComplemento()
         ));
         return  ResponseEntity.created(uri).body(datosRespuestaPaciente);
